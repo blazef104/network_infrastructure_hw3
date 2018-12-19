@@ -1,3 +1,7 @@
+/etc/init.d/quagga restart
+/etc/init.d/dhcp3-server start
+/etc/init.d/ssh restart
+
 ip link set eth0 up
 ip address add 192.168.1.1/24 dev eth0
 
@@ -5,9 +9,6 @@ ip link set eth1 up
 ip address add 1.0.1.19/31 dev eth1
 ip route add default via 1.0.1.18
 
-/etc/init.d/quagga restart
-/etc/init.d/dhcp3-server start
-/etc/init.d/ssh restart
 mkdir /home/c_user
 useradd c_user -d /home/c_user
 chown c_user:c_user /home/c_user
@@ -25,3 +26,19 @@ then
 else
 	sleep 1
 fi
+
+# DMZ
+iptables -A FORWARD -d 192.168.1.5 -s 10.0.3.2 -j ACCEPT
+# ssh
+iptables -A FORWARD -s 192.168.1.5 -p tcp --dport 22 -j ACCEPT
+# responeses
+iptables -A FORWARD -d 192.168.1.5 -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -s 192.168.1.5 -j DROP
+#generic
+iptables -A FORWARD -s 192.168.1.0/24 -j ACCEPT
+iptables -A FORWARD -d 192.168.1.0/24 -m state --state ESTABLISHED,RELATED -j ACCEPT
+# vpn
+iptables -A FORWARD -s 192.168.1.4 -p udp --dport 1194 -j ACCEPT
+
+iptables -A FORWARD -j DROP
+
