@@ -1,0 +1,16 @@
+ip link set eth0 up
+ip address add 192.168.2.4/24 dev eth0
+ip route add default via 192.168.2.1
+
+cd /usr/share/doc/openvpn/examples/easy-rsa/2.0/
+#source vars
+#./clean-all
+./build-key-server server
+
+
+if [ -e /hostlab/ca.crt ]
+then
+	cp /hostlab/ca.crt /hostlab/pc8/root/
+else
+	sleep 1
+fi
