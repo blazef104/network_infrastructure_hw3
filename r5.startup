@@ -2,6 +2,7 @@
 
 ip link set eth0 up
 ip address add 1.0.1.11/31 dev eth0
+ip route add default via 1.0.1.10
 
 ip link set eth1 up
 ip address add 1.0.1.13/31 dev eth1

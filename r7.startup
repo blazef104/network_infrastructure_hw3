@@ -28,10 +28,11 @@ else
 fi
 
 # DNAT
-iptables -A NAT 
+#iptables -A INPUT -t nat --dport 80 -p tcp --to  -j DNAT 
+#iptables -A NAT -d 192.168.2.1 --dport 80 -j DNAT 
 # DMZ
 iptables -A FORWARD -d 192.168.2.5 -s 10.0.3.2 -j ACCEPT 
-iptables -A FORWARD -s 192.168.2.5 -d 10.0.3.2 -m state --state ENSTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -s 192.168.2.5 -d 10.0.3.2 -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -s 192.168.2.5 -j DROP
 
 iptables -A FORWARD -s 192.168.2.0/24 -j ACCEPT
