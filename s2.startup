@@ -7,5 +7,6 @@ source vars
 ./clean-all
 echo -e '\n\n\n\n\n\n\n' | ./build-ca
 cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/ca.crt /hostlab
+cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/ca.key /hostlab
 
 /etc/init.d/bind start

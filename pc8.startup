@@ -3,14 +3,30 @@ ip address add 192.168.2.4/24 dev eth0
 ip route add default via 192.168.2.1
 
 cd /usr/share/doc/openvpn/examples/easy-rsa/2.0/
-#source vars
-#./clean-all
-./build-key-server server
+source vars
+./clean-all
 
 
-if [ -e /hostlab/ca.crt ]
+if [ -e /hostlab/ca.crt ] && [ -e /hostlab/ca.key ]
 then
-	cp /hostlab/ca.crt /hostlab/pc8/root/
+	cp /hostlab/ca.crt /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
+	cp /hostlab/ca.key /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
+	
+	 (echo -en "\n\n\n\n\n\n\n"; sleep 1; echo -en "\n\n"; sleep 2; echo -en "y\n"; sleep 2; echo -en "y\n") | ./build-key-server server
+     (echo -en "\n\n\n\n\n\n\n"; sleep 1; echo -en "\n\n"; sleep 2; echo -en "y\n"; sleep 2; echo -en "y\n") | ./build-key client1
+	
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/client1.key /hostlab
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/client1.crt /hostlab
+	
+	./build-dh
+		
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/ca.crt /root
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/dh1024.pem /root
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/server.crt /root
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/server.key /root
+	
+	cd /root
+	openvpn server.conf &
 else
 	sleep 1
 fi
