@@ -32,7 +32,7 @@ done
 
 while true; do
 	if ping -c 1 pc7.paris.exam.edu &> /dev/null; then
-		pc7_address=$(nslookup pc7.paris.rexam.edu | grep "Address:" | awk 'END {print $2}' | cut -d ' ' -f2)
+		pc7_address=$(nslookup pc7.paris.rexam.edu | grep "Address:" | sed -n '2p' | cut -d ' ' -f2)
 		echo -e "pc7 has ip: $pc7_address\n" 
 		break
 	fi
