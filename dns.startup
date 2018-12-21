@@ -2,5 +2,9 @@
 /etc/init.d/bind start
 
 rm /hostlab/id_rsa.pub
+rm /hostlab/ca.crt
+rm /hostlab/client1.crt
+rm /hostlab/client1.key	
+
 cp templates/db.paris.exam.edu /hostlab/s2/etc/bind/
 cp templates/db.rome.exam.edu /hostlab/s1/etc/bind/
