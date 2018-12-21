@@ -31,14 +31,16 @@ fi
 done
 
 while true; do
-	if ping -c 1 r7.paris.exam.edu &> /dev/null; then
+	if ping -c 1 pc7.paris.exam.edu &> /dev/null; then
+		pc7_address=$(nslookup pc7.paris.rexam.edu | grep "Address:" | awk 'END {print $2}' | cut -d ' ' -f2)
+		echo -e "pc7 has ip: $pc7_address\n" 
 		break
 	fi
 	sleep 2
 done
 
 # DNAT
-iptables -A PREROUTING -t nat --dport 80 -p tcp --to-destination pc7.paris.exam.edu:8080 -j DNAT 
+iptables -A PREROUTING -t nat -p tcp -d 20.0.1.3 --dport 80 -j DNAT --to-destination $pc_address:8080
 iptables -A FORWARD -p tcp -d pc7.paris.exam.edu --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 # DMZ
 iptables -A FORWARD -d 192.168.2.5 -s 10.0.3.2 -j ACCEPT 
