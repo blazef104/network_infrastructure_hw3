@@ -20,19 +20,33 @@ chmod 700 home/c_user/.ssh
 touch home/c_user/.ssh/authorized_keys
 chown c_user:c_user /home/c_user/.ssh/authorized_keys
 chmod 600 home/c_user/.ssh/authorized_keys
-if [ -e /hostlab/id_rsa.pub ]
-then
-	cat /hostlab/id_rsa.pub > home/c_user/.ssh/authorized_keys
+
+while true; do
+if [ -e /hostlab/id_rsa.pub ]; then
+    cat /hostlab/id_rsa.pub > home/c_user/.ssh/authorized_keys
+    break
 else
-	sleep 1
+    sleep 1
 fi
+done
+
+while true; do
+	if ping -c 1 r7.paris.exam.edu &> /dev/null; then
+		break
+	fi
+	sleep 2
+done
 
 # DNAT
-#iptables -A INPUT -t nat --dport 80 -p tcp --to  -j DNAT 
-#iptables -A NAT -d 192.168.2.1 --dport 80 -j DNAT 
+iptables -A PREROUTING -t nat --dport 80 -p tcp --to-destination pc7.paris.exam.edu:8080 -j DNAT 
+iptables -A FORWARD -p tcp -d pc7.paris.exam.edu --dport 8080 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
 # DMZ
 iptables -A FORWARD -d 192.168.2.5 -s 10.0.3.2 -j ACCEPT 
 iptables -A FORWARD -s 192.168.2.5 -d 10.0.3.2 -m state --state ESTABLISHED,RELATED -j ACCEPT
+# DNS
+iptables -A FORWARD -s 20.0.1.5 -d 192.168.2.5 -p udp --dport 53 -j ACCEPT
+iptables -A FORWARD -s 192.168.2.5 -d 20.0.1.5 -p udp --sport 53 -j ACCEPT
+
 iptables -A FORWARD -s 192.168.2.5 -j DROP
 
 iptables -A FORWARD -s 192.168.2.0/24 -j ACCEPT

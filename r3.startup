@@ -26,9 +26,12 @@ chmod 700 home/c_user/.ssh
 touch home/c_user/.ssh/authorized_keys
 chown c_user:c_user /home/c_user/.ssh/authorized_keys
 chmod 600 home/c_user/.ssh/authorized_keys
-if [ -e /hostlab/id_rsa.pub ]
-then
-	cat /hostlab/id_rsa.pub > home/c_user/.ssh/authorized_keys
+
+while true; do
+if [ -e /hostlab/id_rsa.pub ]; then
+    cat /hostlab/id_rsa.pub > home/c_user/.ssh/authorized_keys
+    break
 else
-	sleep 1
+    sleep 1
 fi
+done

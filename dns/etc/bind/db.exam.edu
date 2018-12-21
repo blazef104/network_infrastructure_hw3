@@ -19,9 +19,9 @@ r6	IN	A	1.0.1.19
 r7	IN	A	20.0.1.3
 
 $ORIGIN rome.exam.edu.
-@	IN	NS	ns.rome.exam.edu.
-ns.rome	IN	A	192.168.1.5
+@	IN	NS	rome.exam.edu.
+rome.exam.edu.	IN	A	192.168.1.5
 
 $ORIGIN paris.exam.edu.
-@	IN	NS	ns.paris.exam.edu.
-ns.paris	IN	A	192.168.2.5
+@	IN	NS	paris.exam.edu.
+paris.exam.edu.	IN	A	192.168.2.5
