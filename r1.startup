@@ -1,7 +1,5 @@
 /etc/init.d/networking restart
 
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-
 ip link set eth1 up
 ip address add 1.0.1.2/31 dev eth1
 
@@ -33,4 +31,6 @@ else
 	sleep 1
 fi
 done
+
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
