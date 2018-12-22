@@ -6,15 +6,20 @@ cd /usr/share/doc/openvpn/examples/easy-rsa/2.0/
 source vars
 ./clean-all
 
-if [ -e /hostlab/ca.crt ] && [ -e /hostlab/client1.crt ] && [ -e /hostlab/client1.key ]
+if [ -e /hostlab/ca.crt ] && [ -e /hostlab/ca.key ]
 then
 	cp /hostlab/ca.crt /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
-	cp /hostlab/client1.crt /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
-	cp /hostlab/client1.key /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
+	cp /hostlab/ca.key /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys
+	
+	
+	(echo -en "\n\n\n\n\n\n\n"; sleep 1; echo -en "\n\n"; sleep 2; echo -en "y\n"; sleep 2; echo -en "y\n") | ./build-key client1
+	
+	
 	
 	cp /hostlab/ca.crt /root
-	cp /hostlab/client1.crt /root
-	cp /hostlab/client1.key /root
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/client1.crt /root
+	cp /usr/share/doc/openvpn/examples/easy-rsa/2.0/keys/client1.key /root
+	
 	
 	cd /root
 	openvpn client.conf &
